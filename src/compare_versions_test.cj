@@ -12,12 +12,20 @@
  */
 /* cjlint-ignore -end suppress this stupid warning */
 
-internal package compare_versions.utils
+package compare_versions
 
-public func validate(version: String): Bool {
-    let regex = VALIDREGEX
-    match (regex.find(version,group: true)) {
-        case Some(_) => true
-        case None => false
+@Test
+private class compareVersionsTest {
+    @TestCase
+    func testCompareVersions(): Unit {
+        @PowerAssert(compareVersions("0.0.1", "0.0.1") == Ordering.EQ)
+        @PowerAssert(compareVersions("0.1.0", "0.1.0") == Ordering.EQ)
+        @PowerAssert(compareVersions("1.0.0", "1.0.0") == Ordering.EQ)
+
+        @PowerAssert(compareVersions("0.0.0", "0.0.0") == Ordering.EQ)
+        @PowerAssert(compareVersions("0.1.0", "0.1.1") == Ordering.LT)
+        @PowerAssert(compareVersions("0.2.0", "0.1.1") == Ordering.GT)
+
+        // @PowerAssert(compareVersions("0.02.0", "0.1.1") == Ordering.GT)
     }
 }
